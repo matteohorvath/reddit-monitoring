@@ -8,17 +8,13 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path='.env.local')
 
 def main():
-    # --- Fill in your own credentials here ---
-    client_id = "YOUR_CLIENT_ID"
-    client_secret = "YOUR_CLIENT_SECRET"
-    user_agent = "YOUR_USER_AGENT"
-
+   
     # Create reddit instance
     reddit = praw.Reddit(
-        client_id=client_id,
-        client_secret=client_secret,
-        user_agent=user_agent
-    )
+        client_id=os.getenv("client_id"),
+        client_secret=os.getenv("client_secret"),
+        user_agent=os.getenv("user_agent")
+                )
     
     # Define the subreddit you want to scrape
     subreddit_name = "learnpython"  # Change this to the subreddit of your choice
