@@ -1,9 +1,9 @@
 version: '3.8'
 
 networks:
-  genmeme_network:
+  wp:
     external:
-      name: genmeme_network
+      name: wp
 
 services:
   app:
