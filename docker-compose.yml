@@ -1,5 +1,10 @@
 version: '3.8'
 
+networks:
+  genmeme_network:
+    external:
+      name: genmeme_network
+
 services:
   app:
     build: .
