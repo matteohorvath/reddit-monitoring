@@ -1,4 +1,5 @@
 build:
+	git pull
 	docker compose build
 
 up:
