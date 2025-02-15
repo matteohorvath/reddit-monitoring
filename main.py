@@ -41,10 +41,13 @@ def main():
             comment_score INTEGER,
             comment_author TEXT,
             comment_created_utc REAL,
-            comment_edited REAL
+            comment_edited REAL,
+            subreddit_name TEXT,
+            query_timestamp REAL
         )
     ''')
     conn.commit()
+    query_timestamp = time.time()
     for submission in submissions:
         # By default, PRAW may not load all comments, so call replace_more
         submission.comments.replace_more(limit=None)
@@ -71,8 +74,10 @@ def main():
                     comment_score,
                     comment_author,
                     comment_created_utc,
-                    comment_edited
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    comment_edited,
+                    subreddit_name,
+                    query_timestamp
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 submission.id,
                 submission.title,
@@ -82,7 +87,9 @@ def main():
                 comment_score,
                 comment_author,
                 comment_created_utc,
-                comment_edited
+                comment_edited,
+                subreddit_name,
+                query_timestamp
             ))
             conn.commit()
 
