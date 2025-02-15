@@ -4,6 +4,7 @@ networks:
   wp:
     name: wp
     external: true
+    external: true
 
 services:
   app:
@@ -20,5 +21,13 @@ services:
     volumes:
       - ./reddit_comments.db:/usr/src/app/reddit_comments.db
     command: sh -c "while true; do python main.py; sleep 60; done"
+    networks:
+      - wp
+  caddy:
+    image: caddy:latest
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "443:443"
     networks:
       - wp
