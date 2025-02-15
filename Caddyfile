@@ -1,6 +1,6 @@
 reddit.genmeme.app:443 {
     route {
-        reverse_proxy http://128.140.45.199:8282
+        reverse_proxy http://app:8282
     }
     tls horvathandrasmate@gmail.com
 }
