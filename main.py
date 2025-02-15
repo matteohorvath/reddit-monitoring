@@ -26,27 +26,30 @@ def main():
     # Retrieve the latest 100 submissions (posts)
     submissions = subreddit.new(limit=100)
     
+    db_exists = os.path.exists('reddit_comments.db')
+    
     # Connect to SQLite database (or create it if it doesn't exist)
     conn = sqlite3.connect('reddit_comments.db')
     cursor = conn.cursor()
 
-    # Create table if it doesn't exist
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS comments (
-            submission_id TEXT,
-            submission_title TEXT,
-            comment_id TEXT PRIMARY KEY,
-            comment_parent_id TEXT,
-            comment_body TEXT,
-            comment_score INTEGER,
-            comment_author TEXT,
-            comment_created_utc REAL,
-            comment_edited REAL,
-            subreddit_name TEXT,
-            query_timestamp REAL
-        )
-    ''')
-    conn.commit()
+    # Create table only if the database didn't exist
+    if not db_exists:
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS comments (
+                submission_id TEXT,
+                submission_title TEXT,
+                comment_id TEXT PRIMARY KEY,
+                comment_parent_id TEXT,
+                comment_body TEXT,
+                comment_score INTEGER,
+                comment_author TEXT,
+                comment_created_utc REAL,
+                comment_edited REAL,
+                subreddit_name TEXT,
+                query_timestamp REAL
+            )
+        ''')
+        conn.commit()
     query_timestamp = time.time()
     for submission in submissions:
         # By default, PRAW may not load all comments, so call replace_more
