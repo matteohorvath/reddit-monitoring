@@ -26,10 +26,14 @@ def main():
     # Retrieve the latest 100 submissions (posts)
     submissions = subreddit.new(limit=100)
     
-    db_exists = os.path.exists('reddit_comments.db')
+    db_path = 'reddit_comments.db'
+    db_exists = os.path.exists(db_path)
+    
+    # Ensure the directory for the database exists
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
     
     # Connect to SQLite database (or create it if it doesn't exist)
-    conn = sqlite3.connect('reddit_comments.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Create table only if the database didn't exist
