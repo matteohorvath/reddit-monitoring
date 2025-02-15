@@ -9,7 +9,7 @@ services:
     build: .
     volumes:
       - ./data:/usr/src/app/data
-    command: sh -c "while true; do python main.py; sleep 60; done"
+    command: sh -c "while true; do python main.py; sleep 190; done"
     networks:
       - wp
   caddy:
