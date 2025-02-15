@@ -2,8 +2,7 @@ version: '3.8'
 
 networks:
   reddit_wp:
-    external: 
-      name: wp
+    external: true
 
 services:
   app:
