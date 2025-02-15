@@ -2,6 +2,7 @@ version: '3.8'
 
 networks:
   wp:
+    name: wp
     external: true
 
 services:
