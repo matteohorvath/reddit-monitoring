@@ -4,8 +4,13 @@ import sqlite3
 app = Flask(__name__)
 
 
+@app.route('/')
+def index():
+    return jsonify({"message": "Server is live"})
+
+
 @app.route('/query', methods=['GET'])
-def run_query():
+def run_query():    
     sql_query = request.args.get('query')
     if not sql_query:
         return jsonify({"error": "No query provided"}), 400
