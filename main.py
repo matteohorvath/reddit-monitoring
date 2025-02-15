@@ -45,37 +45,26 @@ def main():
         )
     ''')
     conn.commit()
-        for submission in submissions:
-            # By default, PRAW may not load all comments, so call replace_more
-            submission.comments.replace_more(limit=None)
+    for submission in submissions:
+        # By default, PRAW may not load all comments, so call replace_more
+        submission.comments.replace_more(limit=None)
+        
+        # Access each comment in the submission
+        for comment in submission.comments.list():
+            # Some fields
+            comment_id = comment.id
+            comment_parent_id = comment.parent_id
+            comment_body = comment.body
+            comment_score = comment.score
+            comment_author = str(comment.author) if comment.author else "[deleted]"
+            comment_created_utc = comment.created_utc
+            comment_edited = comment.edited  # can be False or a timestamp
             
-            # Access each comment in the submission
-            for comment in submission.comments.list():
-                # Some fields
-                comment_id = comment.id
-                comment_parent_id = comment.parent_id
-                comment_body = comment.body
-                comment_score = comment.score
-                comment_author = str(comment.author) if comment.author else "[deleted]"
-                comment_created_utc = comment.created_utc
-                comment_edited = comment.edited  # can be False or a timestamp
-                
-                # Insert comment data into the database
-                cursor.execute('''
-                    INSERT OR REPLACE INTO comments (
-                        submission_id,
-                        submission_title,
-                        comment_id,
-                        comment_parent_id,
-                        comment_body,
-                        comment_score,
-                        comment_author,
-                        comment_created_utc,
-                        comment_edited
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    submission.id,
-                    submission.title,
+            # Insert comment data into the database
+            cursor.execute('''
+                INSERT OR REPLACE INTO comments (
+                    submission_id,
+                    submission_title,
                     comment_id,
                     comment_parent_id,
                     comment_body,
@@ -83,8 +72,19 @@ def main():
                     comment_author,
                     comment_created_utc,
                     comment_edited
-                ))
-                conn.commit()
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                submission.id,
+                submission.title,
+                comment_id,
+                comment_parent_id,
+                comment_body,
+                comment_score,
+                comment_author,
+                comment_created_utc,
+                comment_edited
+            ))
+            conn.commit()
 
     print(f"Comments for the latest 100 posts on r/{subreddit_name} saved to reddit_comments.db")
     conn.close()
