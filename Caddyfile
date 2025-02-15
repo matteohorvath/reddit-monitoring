@@ -1,0 +1,7 @@
+{
+    email horvathandrasmate@gmail.com
+}
+
+:80 {
+    reverse_proxy localhost:8282
+}
