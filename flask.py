@@ -1,7 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import  request, jsonify
 import sqlite3
 
-app = Flask(__name__)
 
 @app.route('/query', methods=['GET'])
 def run_query():
