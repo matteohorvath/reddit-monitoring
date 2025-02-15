@@ -28,6 +28,8 @@ def main():
     
     db_path = '/usr/src/app/reddit_comments.db'
     if not os.path.exists(db_path):
+        # create a database file
+        
         open(db_path, 'a').close()
     db_exists = os.path.exists(db_path)
     

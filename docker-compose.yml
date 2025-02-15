@@ -29,3 +29,6 @@ services:
       - "8443:443"
     networks:
       - wp
+volumes:
+  app:
+  scheduler:
