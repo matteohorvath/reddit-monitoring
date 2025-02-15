@@ -1,7 +1,6 @@
-{
-    email horvathandrasmate@gmail.com
-}
-
-:80 {
-    reverse_proxy localhost:8282
+reddit.genmeme.app:443 {
+    route {
+        reverse_proxy http://128.140.45.199:8282
+    }
+    tls horvathandrasmate@gmail.com
 }

@@ -2,9 +2,7 @@ version: '3.8'
 
 networks:
   wp:
-    name: wp
-    external: true
-    external: true
+    driver: bridge
 
 services:
   app:
