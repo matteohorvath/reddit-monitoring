@@ -2,6 +2,10 @@ import praw
 import csv
 import time
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env.local
+load_dotenv(dotenv_path='.env.local')
 
 def main():
     # --- Fill in your own credentials here ---
