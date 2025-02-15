@@ -26,7 +26,7 @@ def main():
     # Retrieve the latest 100 submissions (posts)
     submissions = subreddit.new(limit=100)
     
-    db_path = 'reddit_comments.db'
+    db_path = os.path.join(os.getcwd(), 'reddit_comments.db')
     db_exists = os.path.exists(db_path)
     
     # Ensure the directory for the database exists
