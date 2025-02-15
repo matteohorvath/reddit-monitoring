@@ -1,5 +1,7 @@
-from flask import  request, jsonify
+from flask import Flask, request, jsonify
 import sqlite3
+
+app = Flask(__name__)
 
 
 @app.route('/query', methods=['GET'])
@@ -27,4 +29,4 @@ def run_query():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8282)
