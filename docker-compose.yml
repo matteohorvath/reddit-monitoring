@@ -13,11 +13,11 @@ services:
       - "8282:8282"
     command: python app.py
     networks:
-      - reddit_wp
+      - wp
   scheduler:
     build: .
     volumes:
       - ./reddit_comments.db:/usr/src/app/reddit_comments.db
     command: sh -c "while true; do python main.py; sleep 60; done"
     networks:
-      - reddit_wp
+      - wp
