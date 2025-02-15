@@ -8,10 +8,10 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r REQUIREMENTS.TXT
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 8282 available to the world outside this container
 EXPOSE 8282
 
 # Run app.py when the container launches
-CMD ["flask", "run", "--host=0.0.0.0", "--port=8282"]
+CMD ["python", "app.py"]

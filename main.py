@@ -51,6 +51,8 @@ def main():
         ''')
         conn.commit()
     query_timestamp = time.time()
+    print(f"Query timestamp: {query_timestamp}")
+    
     for submission in submissions:
         # By default, PRAW may not load all comments, so call replace_more
         submission.comments.replace_more(limit=None)

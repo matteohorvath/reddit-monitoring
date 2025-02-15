@@ -7,7 +7,7 @@ services:
       - ./reddit_comments.db:/usr/src/app/reddit_comments.db
     ports:
       - "8282:8282"
-    command: flask run --host=0.0.0.0 --port=8282
+    command: python app.py
 
   scheduler:
     build: .
