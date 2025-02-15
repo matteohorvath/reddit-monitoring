@@ -27,6 +27,8 @@ def main():
     submissions = subreddit.new(limit=100)
     
     db_path = '/usr/src/app/reddit_comments.db'
+    if not os.path.exists(db_path):
+        open(db_path, 'a').close()
     db_exists = os.path.exists(db_path)
     
     # Ensure the directory for the database exists
