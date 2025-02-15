@@ -42,7 +42,7 @@ def main():
         )
     ''')
     conn.commit()
-    subreddit_names = ["learnpython", "Python", "programming"]  # Add more subreddits as needed
+    subreddit_names = ["learnpython", "math", "memes"]  # Add more subreddits as needed
     
     for subreddit_name in subreddit_names:
         # Create the subreddit object
@@ -98,6 +98,7 @@ def main():
                     query_timestamp
                 ))
                 conn.commit()
+        time.sleep(60)
 
 if __name__ == "__main__":
     main()
