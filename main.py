@@ -1,5 +1,6 @@
 import praw
 import csv
+import sqlite3
 import time
 import os
 from dotenv import load_dotenv
@@ -25,29 +26,25 @@ def main():
     # Retrieve the latest 100 submissions (posts)
     submissions = subreddit.new(limit=100)
     
-    # Build a timestamped CSV filename
-    timestamp_str = time.strftime("%Y%m%d-%H%M%S")
-    csv_filename = f"reddit_comments_{timestamp_str}.csv"
-    
-    # Define the CSV headers
-    fieldnames = [
-        "submission_id",
-        "submission_title",
-        "comment_id",
-        "comment_parent_id",
-        "comment_body",
-        "comment_score",
-        "comment_author",
-        "comment_created_utc",
-        "comment_edited"
-    ]
-    
-    # Ensure we write to a valid file path
-    # (This script writes to the current working directory)
-    with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        
+    # Connect to SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('reddit_comments.db')
+    cursor = conn.cursor()
+
+    # Create table if it doesn't exist
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS comments (
+            submission_id TEXT,
+            submission_title TEXT,
+            comment_id TEXT PRIMARY KEY,
+            comment_parent_id TEXT,
+            comment_body TEXT,
+            comment_score INTEGER,
+            comment_author TEXT,
+            comment_created_utc REAL,
+            comment_edited REAL
+        )
+    ''')
+    conn.commit()
         for submission in submissions:
             # By default, PRAW may not load all comments, so call replace_more
             submission.comments.replace_more(limit=None)
@@ -63,19 +60,34 @@ def main():
                 comment_created_utc = comment.created_utc
                 comment_edited = comment.edited  # can be False or a timestamp
                 
-                writer.writerow({
-                    "submission_id": submission.id,
-                    "submission_title": submission.title,
-                    "comment_id": comment_id,
-                    "comment_parent_id": comment_parent_id,
-                    "comment_body": comment_body,
-                    "comment_score": comment_score,
-                    "comment_author": comment_author,
-                    "comment_created_utc": comment_created_utc,
-                    "comment_edited": comment_edited
-                })
+                # Insert comment data into the database
+                cursor.execute('''
+                    INSERT OR REPLACE INTO comments (
+                        submission_id,
+                        submission_title,
+                        comment_id,
+                        comment_parent_id,
+                        comment_body,
+                        comment_score,
+                        comment_author,
+                        comment_created_utc,
+                        comment_edited
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    submission.id,
+                    submission.title,
+                    comment_id,
+                    comment_parent_id,
+                    comment_body,
+                    comment_score,
+                    comment_author,
+                    comment_created_utc,
+                    comment_edited
+                ))
+                conn.commit()
 
-    print(f"Comments for the latest 100 posts on r/{subreddit_name} saved to {csv_filename}")
+    print(f"Comments for the latest 100 posts on r/{subreddit_name} saved to reddit_comments.db")
+    conn.close()
 
 if __name__ == "__main__":
     main()
